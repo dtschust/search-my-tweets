@@ -10,22 +10,34 @@ type Tweet = {
   created_at: string;
 }
 
-async function searchTweets(query: string) {
-  const { results } = await fetch(`https://drews-little-helpers.herokuapp.com/searchTweets?query=${encodeURIComponent(query)}`).then(resp=>resp.json())
-  return results;
+async function searchTweets(query: string, password: string) {
+  try {
+    const { results } = await fetch(`https://drews-little-helpers.herokuapp.com/searchTweets?query=${encodeURIComponent(query)}&pw=${password}`).then(resp=>resp.json())
+    return results;
+  } catch (e) {
+    return []
+  }
 }
 
 function App() {
   const [results, setResults] = useState<Tweet[]>([])
+  const [password, setPassword] = useState<string>(localStorage.getItem('password') || '')
   async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e?.target;
-    const results = await searchTweets(value);
+    const results = await searchTweets(value, password);
     setResults(results);
   }
   const throttledOnChange = _.throttle(onChange, 500);
 
+  function onPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e?.target;
+    localStorage.setItem('password', value);
+    setPassword(value);
+  }
+
   return (
     <div className="App">
+      <input type='password' value={password} onChange={onPasswordChange} />
       <input type='search' placeholder='Search My Tweets' onChange={throttledOnChange}/>
       {results.map((result) => {
         const __html = tweetToHTML.parse(result).html;
