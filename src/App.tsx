@@ -37,7 +37,6 @@ function App() {
 
   return (
     <div className="App">
-      <input type='password' value={password} onChange={onPasswordChange} />
       <input type='search' placeholder='Search My Tweets' onChange={throttledOnChange}/>
       {results.map((result) => {
         const __html = tweetToHTML.parse(result).html;
@@ -50,6 +49,7 @@ function App() {
         </div>
         )
       })}
+      <input type='password' value={password} onChange={onPasswordChange} />
     </div>
   );
 }
