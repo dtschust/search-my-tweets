@@ -38,10 +38,10 @@ function App() {
   return (
     <div className="App">
       <input type='search' placeholder='Search My Tweets' onChange={throttledOnChange}/>
-      {results.map((result) => {
+      {results.map((result, i) => {
         const __html = tweetToHTML.parse(result).html;
         return (
-        <div key={result.id_str} style={{margin: '30px 0', border: '1px solid black', padding: '10px' }} >
+        <div key={`${result.id_str}-${i}`} style={{margin: '30px 0', border: '1px solid black', padding: '10px' }} >
           <div dangerouslySetInnerHTML={{ __html }}/>
           <div>
             <a target='_blank' rel='noreferrer' href={`https://twitter.com/nuncamind/status/${result.id_str}`}>{result.created_at}</a>
